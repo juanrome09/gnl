@@ -6,7 +6,7 @@
 /*   By: juanrome <juanrome@student.42madrid.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 19:44:48 by juanrome          #+#    #+#             */
-/*   Updated: 2025/01/29 20:22:42 by juanrome         ###   ########.fr       */
+/*   Updated: 2025/01/29 20:43:05 by juanrome         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@ char	*read_line(int fd, char *Master_Line, char *buffer)
         size = read(fd, buffer, BUFFER_SIZE);
         if(size < 0)
             return (free(buffer),free(Master_Line), Master_Line = NULL);
-        Master_Line[size] = 0;
+        Master_Line[size] = '\0';
         Master_Line = ft_strjoin(Master_Line, buffer);
         if(!Master_Line)
-        return (free(buffer), buffer = NULL);
+        return (free(buffer), NULL);
     }
     return (free(buffer), Master_Line);
 }
@@ -93,7 +93,10 @@ char *get_next_line(int fd)
     char        *buffer;
 
     if(fd < 0 || BUFFER_SIZE <= 0)
-        return(free(Master_Line), Master_Line = NULL);
+    {
+        free(Master_Line); 
+        return (Master_Line = NULL);
+    }
     buffer = malloc((BUFFER_SIZE + 1) * sizeof (char));
     if (!buffer)
         return(free(Master_Line), Master_Line = NULL);
@@ -101,6 +104,9 @@ char *get_next_line(int fd)
     if (Master_Line == NULL)
         return(NULL);
     line = extract_line(Master_Line);
+    if (!line)
+		return (free (Master_Line), Master_Line = NULL);
+	Master_Line = extract_remaining(Master_Line);
     if(!Master_Line)
         return (free(line), NULL);
     if (*Master_Line == '\0')
