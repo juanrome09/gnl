@@ -6,33 +6,81 @@
 /*   By: juanrome <juanrome@student.42madrid.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 19:45:15 by juanrome          #+#    #+#             */
-/*   Updated: 2025/01/15 21:35:06 by juanrome         ###   ########.fr       */
+/*   Updated: 2025/01/29 20:24:50 by juanrome         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int main() {
-    // Abre el archivo en modo de solo lectura
-    int fd = open("archivo.txt", O_RDONLY);
-    if (fd == -1) {
-        perror("Error al abrir el archivo");
-        return 1;
-    }
+char	*ft_strjoin(char *s1, char *s2)
+{
+	int		i;
+	int		j;
+	char	*tab;
 
-    char buffer[100]; // Buffer para almacenar los datos leídos
-    ssize_t bytesRead = read(fd, buffer, sizeof(buffer) - 1);
-    
-    if (bytesRead == -1) {
-        perror("Error al leer el archivo");
-        close(fd);
-        return 1;
-    }
+	i = 0;
+	j = 0;
+	if (!s1)
+		return (ft_strdup(s2));
+	tab = malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
+	if (!tab)
+		return (free(s1), NULL);
+	while (s1[i])
+		tab[j++] = s1[i++];
+	i = 0;
+	while (s2[i])
+		tab[j++] = s2[i++];
+	tab[j] = 0;
+	free (s1);
+	return (tab);
+}
 
-    buffer[bytesRead] = '\0'; // Aseguramos que el buffer sea una cadena
-    printf("Datos leídos:\n%s\n", buffer);
+size_t	ft_strlen(char *s)
+{
+	size_t	i;
 
-    // Cierra el descriptor de archivo
-    close(fd);
-    return 0;
+	i = 0;
+	while (s[i] != '\0')
+	{
+		i++;
+	}
+	return (i);
+}
+
+char	*ft_strchr(char *s, int c)
+{
+	int	i;
+
+	i = 0;
+	if (!s)
+		return (NULL);
+	while (s[i] != '\0')
+	{
+		if (s[i] == (unsigned char)c)
+			return ((char *)&s[i]);
+		i++;
+	}
+	if ((unsigned char)c == '\0')
+		return ((char *)&s[i]);
+	return (NULL);
+}
+
+char	*ft_strdup(char *s1)
+{
+	char	*mem;
+	size_t	size;
+	int		i;
+
+	size = ft_strlen(s1) + 1;
+	mem = (char *)malloc(size);
+	i = 0;
+	if (!mem)
+		return (NULL);
+	while (s1[i])
+	{
+		mem[i] = s1[i];
+		i++;
+	}
+	mem[i] = '\0';
+	return (mem);
 }
