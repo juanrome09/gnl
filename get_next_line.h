@@ -6,15 +6,15 @@
 /*   By: juanrome <juanrome@student.42madrid.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 19:45:33 by juanrome          #+#    #+#             */
-/*   Updated: 2025/01/29 20:21:56 by juanrome         ###   ########.fr       */
+/*   Updated: 2025/02/04 15:21:53 by juanrome         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
-# define GET_NEXY_LINE_H
+# define GET_NEXT_LINE_H
 
 #ifndef BUFFER_SIZE
-# define BUFFER_SIZE 42
+# define BUFFER_SIZE 1024
 # endif
 
 #include <unistd.h>

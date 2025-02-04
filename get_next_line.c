@@ -6,7 +6,7 @@
 /*   By: juanrome <juanrome@student.42madrid.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 19:44:48 by juanrome          #+#    #+#             */
-/*   Updated: 2025/01/29 20:43:05 by juanrome         ###   ########.fr       */
+/*   Updated: 2025/02/04 15:20:49 by juanrome         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char	*read_line(int fd, char *Master_Line, char *buffer)
         size = read(fd, buffer, BUFFER_SIZE);
         if(size < 0)
             return (free(buffer),free(Master_Line), Master_Line = NULL);
-        Master_Line[size] = '\0';
+        buffer[size] = '\0';
         Master_Line = ft_strjoin(Master_Line, buffer);
         if(!Master_Line)
         return (free(buffer), NULL);
@@ -69,8 +69,8 @@ char	*extract_line(char *Master_line)
     if (Master_line == NULL)
         return(NULL);
     while (Master_line[len] != '\n' && Master_line[len])
-        len++;
-    if (len == '\n')
+        len++; 
+    if (Master_line[len] == '\n')
         len++;
     if (len == 0)
         return(NULL);
@@ -114,18 +114,24 @@ char *get_next_line(int fd)
     return line;
 }
 
-int main(void)
+/* int main(void)
 {
-	int	fd;
-	char	*line;
-	
-	fd = open("archivo.txt", O_RDONLY);
-	line = get_next_line(fd);
-	while (line != NULL)
-	{
-		printf("%s", line);
-		free(line);
-		line = get_next_line(fd);
-	}
-	close(fd);
-}
+    int fd;
+    char *line;
+
+    fd = open("archivo.txt", O_RDONLY);
+    if (fd < 0)
+    {
+        perror("Error al abrir el archivo");
+        return (1);
+    }
+
+    while ((line = get_next_line(fd)) != NULL)
+    {
+        printf("%s", line);
+        free(line);
+    }
+
+    close(fd);
+    return (0);
+}*/
