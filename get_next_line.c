@@ -6,31 +6,31 @@
 /*   By: juanrome <juanrome@student.42madrid.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 19:44:48 by juanrome          #+#    #+#             */
-/*   Updated: 2025/02/04 15:20:49 by juanrome         ###   ########.fr       */
+/*   Updated: 2025/03/10 17:36:01 by juanrome         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*read_line(int fd, char *Master_Line, char *buffer)
+char	*read_line(int fd, char *master_line, char *buffer)
 {
-    int size;
-    size = 1;
+	int	size;
 
-    while(!ft_strchr(Master_Line, '\n') && size > 0)
-    {
-        size = read(fd, buffer, BUFFER_SIZE);
-        if(size < 0)
-            return (free(buffer),free(Master_Line), Master_Line = NULL);
-        buffer[size] = '\0';
-        Master_Line = ft_strjoin(Master_Line, buffer);
-        if(!Master_Line)
-        return (free(buffer), NULL);
-    }
-    return (free(buffer), Master_Line);
+	size = 1;
+	while (!ft_strchr(master_line, '\n') && size > 0)
+	{
+		size = read(fd, buffer, BUFFER_SIZE);
+		if (size < 0)
+			return (free(buffer), free(master_line), master_line = NULL);
+		buffer[size] = '\0';
+		master_line = ft_strjoin(master_line, buffer);
+		if (!master_line)
+			return (free(buffer), NULL);
+	}
+	return (free(buffer), master_line);
 }
 
-char	*extract_remaining(char	*Master_Line)
+char	*extract_remaining(char	*master_line)
 {
 	int		len;
 	int		i;
@@ -38,82 +38,80 @@ char	*extract_remaining(char	*Master_Line)
 
 	len = 0;
 	i = 0;
-	if (Master_Line == NULL)
+	if (master_line == NULL)
 		return (NULL);
-	while (Master_Line[len] != '\n' && Master_Line[len])
+	while (master_line[len] != '\n' && master_line[len])
 		len++;
-	if (Master_Line[len] == '\n')
+	if (master_line[len] == '\n')
 		len++;
-	rest = malloc((ft_strlen(Master_Line) - len + 1) * sizeof(char));
+	rest = malloc((ft_strlen(master_line) - len + 1) * sizeof(char));
 	if (!rest)
-		return (free (Master_Line), NULL);
-	while (Master_Line[len + i])
+		return (free (master_line), NULL);
+	while (master_line[len + i])
 	{
-		rest[i] = Master_Line[len + i];
+		rest[i] = master_line[len + i];
 		i++;
 	}
-	free (Master_Line);
+	free (master_line);
 	rest[i] = 0;
 	return (rest);
 }
 
-char	*extract_line(char *Master_line)
+char	*extract_line(char *master_line)
 {
-    int     i;
-    int     len;
-    char    *line;
+	char	*line;
+	int		len;
+	int		i;
 
-    i = 0;
-    len = 0;
-
-    if (Master_line == NULL)
-        return(NULL);
-    while (Master_line[len] != '\n' && Master_line[len])
-        len++; 
-    if (Master_line[len] == '\n')
-        len++;
-    if (len == 0)
-        return(NULL);
-    line = malloc((len + 1) * sizeof(char));
+	i = 0;
+	len = 0;
+	if (master_line == NULL)
+		return (NULL);
+	while (master_line[len] != '\n' && master_line[len])
+		len++;
+	if (master_line[len] == '\n')
+		len++;
+	if (len == 0)
+		return (NULL);
+	line = malloc((len + 1) * sizeof(char));
 	if (!line)
-        return(NULL);
-    while (i < len)
-    {
-        line[i] = Master_line[i];
-        i++;
-    }
-    line[i] = 0;
-    return (line);
+		return (NULL);
+	while (i < len)
+	{
+		line[i] = master_line[i];
+		i++;
+	}
+	line[i] = 0;
+	return (line);
 }
 
-char *get_next_line(int fd)
+char	*get_next_line(int fd)
 {
-    static char *Master_Line;
-    char        *line;
-    char        *buffer;
+	static char	*master_line;
+	char		*line;
+	char		*buffer;
 
-    if(fd < 0 || BUFFER_SIZE <= 0)
-    {
-        free(Master_Line); 
-        return (Master_Line = NULL);
-    }
-    buffer = malloc((BUFFER_SIZE + 1) * sizeof (char));
-    if (!buffer)
-        return(free(Master_Line), Master_Line = NULL);
-    Master_Line = read_line(fd, Master_Line, buffer);
-    if (Master_Line == NULL)
-        return(NULL);
-    line = extract_line(Master_Line);
-    if (!line)
-		return (free (Master_Line), Master_Line = NULL);
-	Master_Line = extract_remaining(Master_Line);
-    if(!Master_Line)
-        return (free(line), NULL);
-    if (*Master_Line == '\0')
-        return (free(Master_Line), Master_Line = NULL, line);
-    return line;
+	if (fd < 0 || BUFFER_SIZE <= 0)
+	{
+		free(master_line);
+		return (master_line = NULL);
+	}
+	buffer = malloc((BUFFER_SIZE + 1) * sizeof (char));
+	if (!buffer)
+		return (free(master_line), master_line = NULL);
+	master_line = read_line(fd, master_line, buffer);
+	if (master_line == NULL)
+		return (NULL);
+	line = extract_line(master_line);
+	if (!line)
+		return (free (master_line), master_line = NULL);
+	master_line = extract_remaining(master_line);
+	if (!master_line)
+		return (free(line), NULL);
+	if (*master_line == '\0')
+		return (free(master_line), master_line = NULL, line);
+	return (line);
 }
-
 /* int main(void)
 {
     int fd;
